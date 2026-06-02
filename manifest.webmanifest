@@ -1,0 +1,19 @@
+{
+  "name": "工具箱",
+  "short_name": "工具箱",
+  "description": "手機可開啟的個人工具箱 PWA",
+  "start_url": "./?v=1",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#f4f7fb",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
