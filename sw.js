@@ -1,4 +1,4 @@
-const CACHE_NAME = "toolbox-pwa-v1";
+const CACHE_NAME = "toolbox-pwa-v2";
 const CORE_ASSETS = [
   "./",
   "./index.html",

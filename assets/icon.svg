@@ -1,9 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#f4f7fb"/>
-  <rect x="112" y="142" width="288" height="248" rx="32" fill="#ffffff" stroke="#26384f" stroke-width="24"/>
-  <path d="M176 142v-30c0-28 22-50 50-50h60c28 0 50 22 50 50v30" fill="none" stroke="#26384f" stroke-width="24" stroke-linecap="round"/>
-  <rect x="150" y="224" width="72" height="72" rx="16" fill="#9a7345"/>
-  <rect x="256" y="224" width="72" height="72" rx="16" fill="#2f8f83"/>
-  <rect x="150" y="318" width="72" height="72" rx="16" fill="#4f7cff"/>
-  <path d="M282 350h64M314 318v64" stroke="#f0784f" stroke-width="26" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#16A34A"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="112" y="184" width="288" height="208" rx="32"/>
+    <path d="M192 184v-32a32 32 0 0 1 32-32h64a32 32 0 0 1 32 32v32"/>
+    <path d="M112 280h288"/>
+  </g>
 </svg>
