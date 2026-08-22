@@ -401,6 +401,151 @@
     --c-bg: rgba(251, 125, 168, 0.10);
     --c-border: rgba(251, 125, 168, 0.26);
   }
+  .card.transcript {
+    --c-color: #FF5A5F;
+    --c-glow: rgba(255, 90, 95, 0.30);
+    --c-bg: rgba(255, 90, 95, 0.10);
+    --c-border: rgba(255, 90, 95, 0.26);
+  }
+
+  /* ─── YouTube transcript block ─────────────────────────── */
+  .transcript-tool { cursor: default; gap: 14px; }
+  .transcript-tool:hover { transform: none; }
+  .transcript-tool .card-body { flex: initial; }
+  .transcript-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 140px auto;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  .transcript-form label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .transcript-input,
+  .transcript-select,
+  .transcript-history-select {
+    min-height: 46px;
+    width: 100%;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--bg-elev);
+    color: var(--text);
+    font: 500 13px/1.4 var(--font-sans);
+    outline: none;
+  }
+  .transcript-input { padding: 11px 14px; }
+  .transcript-select,
+  .transcript-history-select { padding: 10px 12px; }
+  .transcript-input::placeholder { color: var(--text-dim); }
+  .transcript-input:focus,
+  .transcript-select:focus,
+  .transcript-history-select:focus {
+    border-color: var(--c-color);
+    box-shadow: 0 0 0 3px rgba(255, 90, 95, 0.14);
+  }
+  .transcript-primary,
+  .transcript-action {
+    min-height: 44px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--transition), background var(--transition), color var(--transition), opacity var(--transition);
+  }
+  .transcript-primary {
+    padding: 10px 18px;
+    border: 1px solid #FF7478;
+    background: #FF5A5F;
+    color: #180A0B;
+    white-space: nowrap;
+  }
+  .transcript-primary:hover { background: #FF7478; }
+  .transcript-primary:disabled { opacity: 0.58; cursor: wait; }
+  .transcript-status {
+    display: none;
+    position: relative;
+    z-index: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: rgba(15, 23, 42, 0.78);
+    color: var(--text-muted);
+    font: 500 12px/1.55 var(--font-mono);
+  }
+  .transcript-status.show { display: block; }
+  .transcript-status.ok { border-color: rgba(34, 197, 94, 0.35); color: #86EFAC; }
+  .transcript-status.err { border-color: rgba(255, 90, 95, 0.42); color: #FDA4AF; }
+  .transcript-result {
+    display: none;
+    position: relative;
+    z-index: 1;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(10, 15, 28, 0.72);
+    overflow: hidden;
+  }
+  .transcript-result.show { display: block; }
+  .transcript-result-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .transcript-result-copy { min-width: 0; }
+  .transcript-result-title { font-size: 14px; font-weight: 650; line-height: 1.45; }
+  .transcript-result-meta { margin-top: 4px; color: var(--text-dim); font: 500 10px/1.5 var(--font-mono); }
+  .transcript-actions { display: flex; flex-wrap: wrap; gap: 7px; justify-content: flex-end; }
+  .transcript-action {
+    padding: 7px 10px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: 10px;
+  }
+  .transcript-action:hover { border-color: var(--c-color); color: var(--text); }
+  .transcript-output {
+    width: 100%;
+    min-height: 240px;
+    max-height: 52vh;
+    padding: 14px;
+    border: 0;
+    resize: vertical;
+    outline: none;
+    background: transparent;
+    color: #D8E0EE;
+    font: 400 13px/1.72 var(--font-mono);
+  }
+  .transcript-history-row {
+    display: none;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .transcript-history-row.show { display: grid; }
+  .transcript-spinner {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    margin-right: 7px;
+    border: 2px solid rgba(24, 10, 11, 0.35);
+    border-top-color: #180A0B;
+    border-radius: 50%;
+    vertical-align: -2px;
+    animation: transcript-spin 0.75s linear infinite;
+  }
+  @keyframes transcript-spin { to { transform: rotate(360deg); } }
 
   /* ─── Footnote (glass dock) ─────────────────────────── */
   .footnote {
@@ -446,6 +591,10 @@
     .card { padding: 18px; min-height: 0; }
     .span-large .card-name { font-size: 22px; }
     .statusbar { font-size: 10px; padding: 6px 12px; }
+    .transcript-form { grid-template-columns: 1fr; }
+    .transcript-result-head { flex-direction: column; }
+    .transcript-actions { justify-content: flex-start; }
+    .transcript-output { min-height: 300px; font-size: 12px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -492,7 +641,7 @@
   <section aria-label="工具列表">
     <div class="section-head">
       <h2>Tools</h2>
-      <span class="meta">05 / ACTIVE</span>
+      <span class="meta">06 / ACTIVE</span>
     </div>
 
     <div class="grid">
@@ -577,6 +726,58 @@
         </div>
       </a>
 
+      <article class="card transcript span-wide transcript-tool" id="youtube-transcript">
+        <div class="card-head">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <path d="M7 10h4M7 14h4M14 10h3M14 14h3"/>
+            </svg>
+          </div>
+          <span class="card-id">TOOL_06</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">YouTube 逐字稿</h3>
+          <p class="card-desc">貼上公開影片網址，一鍵取得作者字幕或自動字幕。可複製文字、下載 TXT／SRT，並保留最近的截取記錄。</p>
+        </div>
+        <div class="transcript-form">
+          <label for="transcript-url">YouTube 影片網址</label>
+          <input class="transcript-input" id="transcript-url" type="url" inputmode="url" autocomplete="url" placeholder="https://www.youtube.com/watch?v=…">
+          <label for="transcript-language">字幕語言</label>
+          <select class="transcript-select" id="transcript-language">
+            <option value="auto">自動選擇</option>
+            <option value="zh-Hant">繁體中文</option>
+            <option value="zh-Hans">簡體中文</option>
+            <option value="en">English</option>
+          </select>
+          <button class="transcript-primary" id="transcript-capture" type="button">截取逐字稿</button>
+        </div>
+        <div class="transcript-status" id="transcript-status" role="status" aria-live="polite"></div>
+        <div class="transcript-history-row" id="transcript-history-row">
+          <select class="transcript-history-select" id="transcript-history" aria-label="最近截取的逐字稿"></select>
+          <button class="transcript-action" id="transcript-delete" type="button">刪除記錄</button>
+        </div>
+        <div class="transcript-result" id="transcript-result">
+          <div class="transcript-result-head">
+            <div class="transcript-result-copy">
+              <div class="transcript-result-title" id="transcript-result-title"></div>
+              <div class="transcript-result-meta" id="transcript-result-meta"></div>
+            </div>
+            <div class="transcript-actions">
+              <button class="transcript-action" id="transcript-copy" type="button">COPY</button>
+              <button class="transcript-action" id="transcript-txt" type="button">TXT</button>
+              <button class="transcript-action" id="transcript-srt" type="button">SRT</button>
+              <button class="transcript-action" id="transcript-video" type="button">VIDEO ↗</button>
+            </div>
+          </div>
+          <textarea class="transcript-output" id="transcript-output" readonly aria-label="逐字稿內容"></textarea>
+        </div>
+        <div class="card-foot">
+          <span class="tag"><span class="dot"></span>MAC · LOCAL</span>
+          <span class="arrow">需從「啟動工具箱.command」開啟</span>
+        </div>
+      </article>
+
       <a class="card photo span-half" href="https://mmyangmm.github.io/photography-portfolio/">
         <div class="card-head">
           <div class="card-icon" aria-hidden="true">
@@ -651,6 +852,249 @@
   }
   tick();
   setInterval(tick, 1000);
+
+  // ─── YouTube transcript tool ───────────────────────────
+  const TRANSCRIPT_HISTORY_KEY = "toolbox_transcripts_v1";
+  const transcriptUrl = document.getElementById("transcript-url");
+  const transcriptLanguage = document.getElementById("transcript-language");
+  const transcriptCapture = document.getElementById("transcript-capture");
+  const transcriptStatus = document.getElementById("transcript-status");
+  const transcriptResult = document.getElementById("transcript-result");
+  const transcriptTitle = document.getElementById("transcript-result-title");
+  const transcriptMeta = document.getElementById("transcript-result-meta");
+  const transcriptOutput = document.getElementById("transcript-output");
+  const transcriptHistoryRow = document.getElementById("transcript-history-row");
+  const transcriptHistorySelect = document.getElementById("transcript-history");
+  let transcriptHistory = loadTranscriptHistory();
+  let activeTranscriptId = transcriptHistory[0]?.id || null;
+  let transcriptBusy = false;
+
+  function loadTranscriptHistory() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(TRANSCRIPT_HISTORY_KEY) || "[]");
+      if (!Array.isArray(parsed)) return [];
+      return parsed.filter(item => item && Array.isArray(item.segments) && item.segments.length).slice(0, 15);
+    } catch {
+      return [];
+    }
+  }
+
+  function saveTranscriptHistory() {
+    let selected = transcriptHistory.slice(0, 15);
+    while (selected.length > 1 && JSON.stringify(selected).length > 3500000) selected.pop();
+    transcriptHistory = selected;
+    try { localStorage.setItem(TRANSCRIPT_HISTORY_KEY, JSON.stringify(selected)); }
+    catch { setTranscriptStatus("逐字稿已取得，但瀏覽器儲存空間不足，這次記錄不會保留。", "err"); }
+  }
+
+  function transcriptApiUrl() {
+    const isLocalToolbox = ["127.0.0.1", "localhost"].includes(location.hostname) && location.port === "8767";
+    return isLocalToolbox ? "/api/transcript" : "http://127.0.0.1:8767/api/transcript";
+  }
+
+  function isYouTubeUrl(value) {
+    try {
+      const host = new URL(value).hostname;
+      return ["youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com", "youtu.be", "www.youtu.be"].includes(host);
+    } catch {
+      return false;
+    }
+  }
+
+  function timeLabel(seconds, includeHours = false) {
+    const safe = Math.max(0, Math.floor(Number(seconds) || 0));
+    const hours = Math.floor(safe / 3600);
+    const minutes = Math.floor((safe % 3600) / 60);
+    const secs = safe % 60;
+    return includeHours || hours
+      ? `${pad(hours)}:${pad(minutes)}:${pad(secs)}`
+      : `${pad(minutes)}:${pad(secs)}`;
+  }
+
+  function languageLabel(language) {
+    const value = String(language || "").toLowerCase();
+    if (value.startsWith("zh-tw") || value.includes("hant") || value.startsWith("zh-hk")) return "繁體中文";
+    if (value.startsWith("zh")) return "中文";
+    if (value.startsWith("en")) return "English";
+    return language || "未知語言";
+  }
+
+  function transcriptText(record) {
+    const includeHours = Number(record?.duration) >= 3600;
+    return (record?.segments || []).map(segment =>
+      `[${timeLabel(segment.start, includeHours)}] ${segment.text}`
+    ).join("\n");
+  }
+
+  function srtTime(seconds) {
+    const total = Math.max(0, Math.round((Number(seconds) || 0) * 1000));
+    const hours = Math.floor(total / 3600000);
+    const minutes = Math.floor((total % 3600000) / 60000);
+    const secs = Math.floor((total % 60000) / 1000);
+    const millis = total % 1000;
+    return `${pad(hours)}:${pad(minutes)}:${pad(secs)},${String(millis).padStart(3, "0")}`;
+  }
+
+  function transcriptSrt(record) {
+    return record.segments.map((segment, index) => {
+      const next = record.segments[index + 1];
+      const proposedEnd = Number(segment.start) + Math.max(0.5, Number(segment.duration) || 2);
+      const end = next ? Math.min(proposedEnd, Math.max(Number(segment.start) + 0.5, Number(next.start) - 0.05)) : proposedEnd;
+      return `${index + 1}\n${srtTime(segment.start)} --> ${srtTime(end)}\n${segment.text}`;
+    }).join("\n\n");
+  }
+
+  function activeTranscript() {
+    return transcriptHistory.find(item => item.id === activeTranscriptId) || null;
+  }
+
+  function setTranscriptStatus(message, type = "") {
+    transcriptStatus.textContent = message;
+    transcriptStatus.className = `transcript-status${message ? " show" : ""}${type ? ` ${type}` : ""}`;
+  }
+
+  function renderTranscriptHistory() {
+    if (!transcriptHistory.length) {
+      transcriptHistoryRow.classList.remove("show");
+      transcriptHistorySelect.innerHTML = "";
+      return;
+    }
+    transcriptHistoryRow.classList.add("show");
+    transcriptHistorySelect.innerHTML = "";
+    transcriptHistory.forEach(item => {
+      const option = document.createElement("option");
+      option.value = item.id;
+      option.textContent = `${item.title} · ${new Date(item.capturedAt).toLocaleDateString("zh-TW")}`;
+      option.selected = item.id === activeTranscriptId;
+      transcriptHistorySelect.appendChild(option);
+    });
+  }
+
+  function renderTranscriptResult() {
+    const record = activeTranscript();
+    renderTranscriptHistory();
+    if (!record) {
+      transcriptResult.classList.remove("show");
+      return;
+    }
+    transcriptTitle.textContent = record.title;
+    const source = record.source === "manual" ? "作者字幕" : "自動字幕";
+    const duration = record.duration ? timeLabel(record.duration, Number(record.duration) >= 3600) : "";
+    transcriptMeta.textContent = [record.channel, duration, languageLabel(record.language), source, `${record.segments.length} 段`].filter(Boolean).join(" · ");
+    transcriptOutput.value = transcriptText(record);
+    transcriptResult.classList.add("show");
+  }
+
+  async function captureTranscript() {
+    if (transcriptBusy) return;
+    const url = transcriptUrl.value.trim();
+    if (!isYouTubeUrl(url)) {
+      setTranscriptStatus("請貼上有效的 YouTube 影片網址。", "err");
+      transcriptUrl.focus();
+      return;
+    }
+    transcriptBusy = true;
+    transcriptCapture.disabled = true;
+    transcriptCapture.innerHTML = '<span class="transcript-spinner" aria-hidden="true"></span>截取中…';
+    setTranscriptStatus("正在尋找影片字幕，長影片可能需要一點時間…");
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 180000);
+    try {
+      const response = await fetch(transcriptApiUrl(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, language: transcriptLanguage.value }),
+        signal: controller.signal,
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || payload.status !== "ok") throw new Error(payload.error || "截取失敗，請稍後再試。");
+      const record = {
+        id: payload.videoId || String(Date.now()),
+        videoId: payload.videoId || "",
+        url: payload.url || url,
+        title: payload.title || "未命名 YouTube 影片",
+        channel: payload.channel || "",
+        duration: Number(payload.duration) || 0,
+        language: payload.language || "unknown",
+        source: payload.source === "manual" ? "manual" : "automatic",
+        segments: Array.isArray(payload.segments) ? payload.segments : [],
+        capturedAt: Date.now(),
+      };
+      if (!record.segments.length) throw new Error("字幕內容是空的，無法建立逐字稿。");
+      transcriptHistory = transcriptHistory.filter(item => item.id !== record.id);
+      transcriptHistory.unshift(record);
+      activeTranscriptId = record.id;
+      saveTranscriptHistory();
+      renderTranscriptResult();
+      setTranscriptStatus(`完成：已截取 ${record.segments.length} 段字幕並保存到最近記錄。`, "ok");
+    } catch (error) {
+      const message = error?.name === "AbortError"
+        ? "截取逾時，請確認網路後重試。"
+        : error instanceof TypeError
+          ? "找不到 Mac 本機逐字稿服務，請先雙擊「啟動工具箱.command」。"
+          : error?.message || "截取失敗，請稍後再試。";
+      setTranscriptStatus(message, "err");
+    } finally {
+      clearTimeout(timer);
+      transcriptBusy = false;
+      transcriptCapture.disabled = false;
+      transcriptCapture.textContent = "截取逐字稿";
+    }
+  }
+
+  function safeFileName(record, extension) {
+    const name = String(record.title || "youtube-transcript")
+      .replace(/[\\/:*?"<>|]/g, "-")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 80) || "youtube-transcript";
+    return `${name}.${extension}`;
+  }
+
+  function downloadTranscript(extension) {
+    const record = activeTranscript();
+    if (!record) return;
+    const content = extension === "srt" ? transcriptSrt(record) : transcriptText(record);
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = safeFileName(record, extension);
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  transcriptCapture.addEventListener("click", captureTranscript);
+  transcriptUrl.addEventListener("keydown", event => {
+    if (event.key === "Enter") captureTranscript();
+  });
+  transcriptHistorySelect.addEventListener("change", () => {
+    activeTranscriptId = transcriptHistorySelect.value;
+    renderTranscriptResult();
+  });
+  document.getElementById("transcript-delete").addEventListener("click", () => {
+    const record = activeTranscript();
+    if (!record || !confirm(`確定刪除「${record.title}」的逐字稿？`)) return;
+    transcriptHistory = transcriptHistory.filter(item => item.id !== record.id);
+    activeTranscriptId = transcriptHistory[0]?.id || null;
+    saveTranscriptHistory();
+    renderTranscriptResult();
+    setTranscriptStatus("逐字稿記錄已刪除。", "ok");
+  });
+  document.getElementById("transcript-copy").addEventListener("click", async () => {
+    const record = activeTranscript();
+    if (!record) return;
+    try { await navigator.clipboard.writeText(transcriptText(record)); }
+    catch { transcriptOutput.select(); document.execCommand("copy"); }
+    setTranscriptStatus("逐字稿已複製到剪貼簿。", "ok");
+  });
+  document.getElementById("transcript-txt").addEventListener("click", () => downloadTranscript("txt"));
+  document.getElementById("transcript-srt").addEventListener("click", () => downloadTranscript("srt"));
+  document.getElementById("transcript-video").addEventListener("click", () => {
+    const record = activeTranscript();
+    if (record) window.open(record.url, "_blank", "noopener,noreferrer");
+  });
+  renderTranscriptResult();
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));

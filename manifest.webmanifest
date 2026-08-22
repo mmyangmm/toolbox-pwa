@@ -2,7 +2,7 @@
   "name": "工具箱",
   "short_name": "工具箱",
   "description": "手機可開啟的個人工具箱 PWA",
-  "start_url": "./?v=2",
+  "start_url": "./?v=3",
   "scope": ".",
   "display": "standalone",
   "background_color": "#0A0F1C",
