@@ -609,7 +609,7 @@
     border-color: var(--c-color);
     box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.14);
   }
-  .report-options { display: grid; grid-template-columns: 150px auto 1fr; gap: 10px; }
+  .report-options { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 10px; }
   .report-select,
   .report-history-select { min-height: 46px; padding: 10px 12px; font: 500 13px/1.4 var(--font-sans); }
   .report-primary,
@@ -640,7 +640,6 @@
   .report-action:hover { border-color: var(--c-color); color: var(--text); }
   .report-action:focus-visible,
   .report-primary:focus-visible { outline: 2px solid var(--c-color); outline-offset: 2px; }
-  .report-secondary { justify-self: start; }
   .report-status {
     display: none;
     position: relative;
@@ -772,7 +771,6 @@
     .report-title-input,
     .report-source { grid-column: 1; }
     .report-options { grid-template-columns: 1fr; }
-    .report-secondary { justify-self: stretch; }
     .report-result-head { flex-direction: column; }
     .report-actions { justify-content: flex-start; }
     .report-layout { grid-template-columns: 1fr; }
@@ -987,7 +985,6 @@
               <option value="7" selected>標準 · 7 點</option>
               <option value="9">詳細 · 9 點</option>
             </select>
-            <button class="report-action report-secondary" id="report-use-captured" type="button">帶入上方逐字稿</button>
             <button class="report-primary" id="report-generate" type="button">生成重點報告</button>
           </div>
         </div>
@@ -1870,17 +1867,6 @@
     setReportStatus("視覺圖已下載為 PNG。", "ok");
   }
 
-  document.getElementById("report-use-captured").addEventListener("click", () => {
-    const record = activeTranscript();
-    if (!record) {
-      setReportStatus("上方尚無逐字稿記錄；請直接貼上內容，或先截取一部影片。", "err");
-      reportSource.focus();
-      return;
-    }
-    reportTitleInput.value = record.title || "";
-    reportSource.value = transcriptText(record);
-    setReportStatus("已帶入上方逐字稿，可以直接生成報告。", "ok");
-  });
   reportGenerate.addEventListener("click", generateReport);
   reportHistorySelect.addEventListener("change", () => {
     activeReportId = reportHistorySelect.value;
