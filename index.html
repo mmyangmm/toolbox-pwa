@@ -44,6 +44,18 @@
 
   *, *::before, *::after { box-sizing: border-box; }
 
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   html { -webkit-text-size-adjust: 100%; }
 
   body {
@@ -407,6 +419,12 @@
     --c-bg: rgba(255, 90, 95, 0.10);
     --c-border: rgba(255, 90, 95, 0.26);
   }
+  .card.report {
+    --c-color: #2DD4BF;
+    --c-glow: rgba(45, 212, 191, 0.30);
+    --c-bg: rgba(45, 212, 191, 0.10);
+    --c-border: rgba(45, 212, 191, 0.26);
+  }
 
   /* ─── YouTube transcript block ─────────────────────────── */
   .transcript-tool { cursor: default; gap: 14px; }
@@ -547,6 +565,161 @@
   }
   @keyframes transcript-spin { to { transform: rotate(360deg); } }
 
+  /* ─── Transcript report block ─────────────────────────── */
+  .report-tool { cursor: default; gap: 14px; }
+  .report-tool:hover { transform: none; }
+  .report-tool .card-body { flex: initial; }
+  .report-compose {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  .report-title-input,
+  .report-source,
+  .report-select,
+  .report-history-select {
+    width: 100%;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--bg-elev);
+    color: var(--text);
+    outline: none;
+  }
+  .report-title-input {
+    grid-column: 1 / -1;
+    min-height: 46px;
+    padding: 11px 14px;
+    font: 500 13px/1.4 var(--font-sans);
+  }
+  .report-source {
+    grid-column: 1 / -1;
+    min-height: 260px;
+    padding: 14px;
+    resize: vertical;
+    font: 400 13px/1.72 var(--font-mono);
+  }
+  .report-title-input::placeholder,
+  .report-source::placeholder { color: var(--text-dim); }
+  .report-title-input:focus,
+  .report-source:focus,
+  .report-select:focus,
+  .report-history-select:focus {
+    border-color: var(--c-color);
+    box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.14);
+  }
+  .report-options { display: grid; grid-template-columns: 150px auto 1fr; gap: 10px; }
+  .report-select,
+  .report-history-select { min-height: 46px; padding: 10px 12px; font: 500 13px/1.4 var(--font-sans); }
+  .report-primary,
+  .report-action {
+    min-height: 44px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--transition), background var(--transition), color var(--transition), opacity var(--transition);
+  }
+  .report-primary {
+    padding: 10px 18px;
+    border: 1px solid #5EEAD4;
+    background: #2DD4BF;
+    color: #071A18;
+    white-space: nowrap;
+  }
+  .report-primary:hover { background: #5EEAD4; }
+  .report-primary:disabled { opacity: 0.58; cursor: wait; }
+  .report-action {
+    padding: 7px 10px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: 10px;
+  }
+  .report-action:hover { border-color: var(--c-color); color: var(--text); }
+  .report-action:focus-visible,
+  .report-primary:focus-visible { outline: 2px solid var(--c-color); outline-offset: 2px; }
+  .report-secondary { justify-self: start; }
+  .report-status {
+    display: none;
+    position: relative;
+    z-index: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: rgba(15, 23, 42, 0.78);
+    color: var(--text-muted);
+    font: 500 12px/1.55 var(--font-mono);
+  }
+  .report-status.show { display: block; }
+  .report-status.ok { border-color: rgba(45, 212, 191, 0.42); color: #99F6E4; }
+  .report-status.err { border-color: rgba(255, 90, 95, 0.42); color: #FDA4AF; }
+  .report-history-row {
+    display: none;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .report-history-row.show { display: grid; }
+  .report-result {
+    display: none;
+    position: relative;
+    z-index: 1;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(10, 15, 28, 0.72);
+    overflow: hidden;
+  }
+  .report-result.show { display: block; }
+  .report-result-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .report-result-title { font-size: 15px; font-weight: 650; line-height: 1.45; }
+  .report-result-meta { margin-top: 4px; color: var(--text-dim); font: 500 10px/1.5 var(--font-mono); }
+  .report-actions { display: flex; flex-wrap: wrap; gap: 7px; justify-content: flex-end; }
+  .report-layout { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr); }
+  .report-paper {
+    min-width: 0;
+    padding: 22px;
+    border-right: 1px solid var(--border);
+    color: #D8E0EE;
+  }
+  .report-paper h4 { margin: 0 0 8px; color: var(--text); font-size: 15px; }
+  .report-paper h4:not(:first-child) { margin-top: 24px; }
+  .report-paper p,
+  .report-paper li { font-size: 13px; line-height: 1.72; }
+  .report-paper p { margin: 0; color: var(--text-muted); }
+  .report-paper ol,
+  .report-paper ul { margin: 0; padding-left: 22px; }
+  .report-paper li + li { margin-top: 8px; }
+  .report-keywords { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 2px; }
+  .report-keyword {
+    padding: 5px 9px;
+    border: 1px solid rgba(45, 212, 191, 0.24);
+    border-radius: 999px;
+    background: rgba(45, 212, 191, 0.08);
+    color: #99F6E4;
+    font: 600 10px/1.3 var(--font-mono);
+  }
+  .report-visual { padding: 14px; min-width: 0; }
+  .report-visual-tools { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; margin-bottom: 10px; }
+  .report-canvas-wrap {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: #07111E;
+    aspect-ratio: 8 / 5;
+  }
+  .report-canvas { display: block; width: 100%; height: 100%; }
+  .report-privacy { color: var(--text-dim); font: 500 10px/1.55 var(--font-mono); margin: 10px 2px 0; }
+
   /* ─── Footnote (glass dock) ─────────────────────────── */
   .footnote {
     margin-top: 32px;
@@ -595,6 +768,16 @@
     .transcript-result-head { flex-direction: column; }
     .transcript-actions { justify-content: flex-start; }
     .transcript-output { min-height: 300px; font-size: 12px; }
+    .report-compose { grid-template-columns: 1fr; }
+    .report-title-input,
+    .report-source { grid-column: 1; }
+    .report-options { grid-template-columns: 1fr; }
+    .report-secondary { justify-self: stretch; }
+    .report-result-head { flex-direction: column; }
+    .report-actions { justify-content: flex-start; }
+    .report-layout { grid-template-columns: 1fr; }
+    .report-paper { border-right: 0; border-bottom: 1px solid var(--border); padding: 18px; }
+    .report-visual { padding: 12px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -641,7 +824,7 @@
   <section aria-label="工具列表">
     <div class="section-head">
       <h2>Tools</h2>
-      <span class="meta">06 / ACTIVE</span>
+      <span class="meta">07 / ACTIVE</span>
     </div>
 
     <div class="grid">
@@ -775,6 +958,77 @@
         <div class="card-foot">
           <span class="tag"><span class="dot"></span>MAC · LOCAL</span>
           <span class="arrow">需從「啟動工具箱.command」開啟</span>
+        </div>
+      </article>
+
+      <article class="card report span-wide report-tool" id="transcript-report">
+        <div class="card-head">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19V5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>
+              <path d="M14 3v6h6M8 13h8M8 17h5"/>
+            </svg>
+          </div>
+          <span class="card-id">TOOL_07</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">逐字稿重點報告</h3>
+          <p class="card-desc">貼上逐字稿，一鍵整理摘要、核心主題、關鍵句與行動項目，並產生可下載的概念地圖圖片。全程在瀏覽器處理。</p>
+        </div>
+        <div class="report-compose">
+          <label for="report-title" class="sr-only">報告標題</label>
+          <input class="report-title-input" id="report-title" type="text" maxlength="100" placeholder="報告標題（選填，未填會自動命名）">
+          <label for="report-source" class="sr-only">逐字稿內容</label>
+          <textarea class="report-source" id="report-source" placeholder="把已截取的逐字稿貼在這裡…"></textarea>
+          <div class="report-options">
+            <label for="report-depth" class="sr-only">報告詳細度</label>
+            <select class="report-select" id="report-depth">
+              <option value="5">精簡 · 5 點</option>
+              <option value="7" selected>標準 · 7 點</option>
+              <option value="9">詳細 · 9 點</option>
+            </select>
+            <button class="report-action report-secondary" id="report-use-captured" type="button">帶入上方逐字稿</button>
+            <button class="report-primary" id="report-generate" type="button">生成重點報告</button>
+          </div>
+        </div>
+        <div class="report-status" id="report-status" role="status" aria-live="polite"></div>
+        <div class="report-history-row" id="report-history-row">
+          <select class="report-history-select" id="report-history" aria-label="歷史重點報告"></select>
+          <button class="report-action" id="report-delete" type="button">刪除記錄</button>
+        </div>
+        <div class="report-result" id="report-result">
+          <div class="report-result-head">
+            <div>
+              <div class="report-result-title" id="report-result-title"></div>
+              <div class="report-result-meta" id="report-result-meta"></div>
+            </div>
+            <div class="report-actions">
+              <button class="report-action" id="report-copy" type="button">COPY</button>
+              <button class="report-action" id="report-md" type="button">MD</button>
+              <button class="report-action" id="report-png" type="button">PNG</button>
+            </div>
+          </div>
+          <div class="report-layout">
+            <div class="report-paper" id="report-output" aria-label="重點報告內容"></div>
+            <div class="report-visual">
+              <div class="report-visual-tools">
+                <label for="report-visual-mode" class="sr-only">圖片樣式</label>
+                <select class="report-select" id="report-visual-mode">
+                  <option value="map">概念地圖</option>
+                  <option value="cards">重點卡片</option>
+                </select>
+                <button class="report-action" id="report-refresh-image" type="button">切換圖片</button>
+              </div>
+              <div class="report-canvas-wrap">
+                <canvas class="report-canvas" id="report-canvas" width="1600" height="1000" role="img" aria-label="逐字稿重點視覺圖"></canvas>
+              </div>
+              <p class="report-privacy">圖片由摘要內容在本機即時繪製，可直接下載分享；不會上傳逐字稿。</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-foot">
+          <span class="tag"><span class="dot"></span>BROWSER · FREE</span>
+          <span class="arrow">免金鑰 · 免啟動程式</span>
         </div>
       </article>
 
@@ -1095,6 +1349,565 @@
     if (record) window.open(record.url, "_blank", "noopener,noreferrer");
   });
   renderTranscriptResult();
+
+  // ─── Local transcript report tool ──────────────────────
+  const REPORT_HISTORY_KEY = "toolbox_transcript_reports_v1";
+  const reportTitleInput = document.getElementById("report-title");
+  const reportSource = document.getElementById("report-source");
+  const reportDepth = document.getElementById("report-depth");
+  const reportGenerate = document.getElementById("report-generate");
+  const reportStatus = document.getElementById("report-status");
+  const reportHistoryRow = document.getElementById("report-history-row");
+  const reportHistorySelect = document.getElementById("report-history");
+  const reportResult = document.getElementById("report-result");
+  const reportResultTitle = document.getElementById("report-result-title");
+  const reportResultMeta = document.getElementById("report-result-meta");
+  const reportOutput = document.getElementById("report-output");
+  const reportCanvas = document.getElementById("report-canvas");
+  const reportVisualMode = document.getElementById("report-visual-mode");
+  let reportHistory = loadReportHistory();
+  let activeReportId = reportHistory[0]?.id || null;
+
+  const REPORT_STOP_WORDS = new Set([
+    "this", "that", "with", "from", "have", "will", "would", "there", "their", "they", "them", "then",
+    "than", "when", "what", "where", "which", "while", "were", "been", "being", "because", "about", "into",
+    "your", "youre", "also", "just", "really", "very", "more", "some", "only", "much", "many", "like",
+    "可以", "可能", "就是", "所以", "但是", "因為", "如果", "我們", "你們", "他們", "這個", "那個",
+    "一個", "一些", "這些", "那些", "以及", "而且", "或者", "需要", "已經", "沒有", "不是",
+    "什麼", "怎麼", "現在", "這樣", "這種", "時候", "今天", "大家", "影片", "內容", "問題",
+    "知道", "覺得", "東西", "事情", "進行", "開始", "最後", "目前", "這裡", "非常", "自己",
+    "來說", "來看", "其實", "比較", "然後", "接下來", "基本上", "的話", "的是", "這是"
+  ]);
+  const REPORT_ZH_SEGMENTER = typeof Intl.Segmenter === "function"
+    ? new Intl.Segmenter("zh-TW", { granularity: "word" })
+    : null;
+
+  function loadReportHistory() {
+    try {
+      const value = JSON.parse(localStorage.getItem(REPORT_HISTORY_KEY) || "[]");
+      return Array.isArray(value)
+        ? value.filter(item => item && Array.isArray(item.points) && item.points.length).slice(0, 20)
+        : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveReportHistory() {
+    let selected = reportHistory.slice(0, 20);
+    while (selected.length > 1 && JSON.stringify(selected).length > 3500000) selected.pop();
+    reportHistory = selected;
+    try { localStorage.setItem(REPORT_HISTORY_KEY, JSON.stringify(selected)); }
+    catch { setReportStatus("報告已生成，但瀏覽器儲存空間不足，這次記錄不會保留。", "err"); }
+  }
+
+  function setReportStatus(message, type = "") {
+    reportStatus.textContent = message;
+    reportStatus.className = `report-status${message ? " show" : ""}${type ? ` ${type}` : ""}`;
+  }
+
+  function cleanTranscript(value) {
+    return String(value || "")
+      .replace(/^WEBVTT.*$/gim, "")
+      .replace(/^\s*\d+\s*$/gm, "")
+      .replace(/^\s*(?:\[)?\d{1,2}:\d{2}(?::\d{2})?(?:[.,]\d{1,3})?(?:\])?\s*(?:-->|-|–|—)?\s*(?:\d{1,2}:\d{2}(?::\d{2})?(?:[.,]\d{1,3})?)?\s*/gm, "")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/[ \t]+/g, " ")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  }
+
+  function splitReportSentences(text) {
+    const pieces = [];
+    cleanTranscript(text).split(/\n+/).forEach(line => {
+      const trimmed = line.trim();
+      if (!trimmed) return;
+      const matches = trimmed.match(/[^。！？!?；;.]+(?:[。！？!?；;.]|$)/g) || [trimmed];
+      matches.forEach(part => {
+        const sentence = part.replace(/^[-–—•·*#>\s]+/, "").replace(/\s+/g, " ").trim();
+        const hanCount = (sentence.match(/[\u3400-\u9fff]/g) || []).length;
+        const wordCount = (sentence.match(/[A-Za-z0-9]+/g) || []).length;
+        if (sentence.length >= 10 && (hanCount >= 6 || wordCount >= 5)) pieces.push(sentence.slice(0, 420));
+      });
+    });
+    const seen = new Set();
+    return pieces.filter(sentence => {
+      const key = sentence.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  function rawSentenceTerms(sentence) {
+    const terms = [];
+    const english = sentence.toLowerCase().match(/[a-z][a-z0-9'-]{2,}/g) || [];
+    english.forEach(word => {
+      const normalized = word.replace(/'/g, "");
+      if (!REPORT_STOP_WORDS.has(normalized)) terms.push(normalized);
+    });
+    if (REPORT_ZH_SEGMENTER) {
+      const zhTerms = [];
+      for (const part of REPORT_ZH_SEGMENTER.segment(sentence)) {
+        const term = part.segment.trim();
+        if (part.isWordLike && /^[\u3400-\u9fff]{2,}$/.test(term) && !REPORT_STOP_WORDS.has(term)) zhTerms.push(term);
+      }
+      terms.push(...zhTerms);
+      for (let index = 0; index < zhTerms.length - 1; index += 1) {
+        const phrase = zhTerms[index] + zhTerms[index + 1];
+        if (phrase.length <= 8) terms.push(phrase);
+      }
+    } else {
+      const chunks = sentence.match(/[\u3400-\u9fff]{2,}/g) || [];
+      chunks.forEach(chunk => {
+        for (let size = 2; size <= Math.min(4, chunk.length); size += 1) {
+          for (let index = 0; index <= chunk.length - size; index += 1) {
+            const term = chunk.slice(index, index + size);
+            if (!REPORT_STOP_WORDS.has(term) && !/[的了是在有和與及也而或就都還把被讓給之]/.test(term[0] + term.at(-1))) terms.push(term);
+          }
+        }
+      });
+    }
+    return terms;
+  }
+
+  function keywordAnalysis(sentences) {
+    const counts = new Map();
+    sentences.forEach(sentence => {
+      const unique = new Set(rawSentenceTerms(sentence));
+      unique.forEach(term => counts.set(term, (counts.get(term) || 0) + 1));
+    });
+    const ranked = [...counts.entries()]
+      .filter(([term, count]) => count >= 2 || (sentences.length < 8 && count >= 1 && term.length >= 3))
+      .map(([term, count]) => ({
+        term,
+        count,
+        score: count * (/^[\u3400-\u9fff]+$/.test(term) ? Math.pow(Math.min(term.length, 6), 1.25) : 1.8)
+      }))
+      .sort((a, b) => b.score - a.score || b.term.length - a.term.length);
+    const selected = [];
+    for (const item of ranked) {
+      const overlaps = selected.some(existing =>
+        existing.term.includes(item.term) || item.term.includes(existing.term)
+      );
+      if (!overlaps) selected.push(item);
+      if (selected.length >= 10) break;
+    }
+    return selected;
+  }
+
+  function sentenceTokenSet(sentence, keywords) {
+    const lower = sentence.toLowerCase();
+    const tokens = new Set((lower.match(/[a-z][a-z0-9'-]{2,}/g) || []).filter(word => !REPORT_STOP_WORDS.has(word)));
+    keywords.forEach(({ term }) => { if (lower.includes(term.toLowerCase())) tokens.add(term.toLowerCase()); });
+    return tokens;
+  }
+
+  function setSimilarity(left, right) {
+    if (!left.size || !right.size) return 0;
+    let common = 0;
+    left.forEach(value => { if (right.has(value)) common += 1; });
+    return common / Math.max(left.size, right.size);
+  }
+
+  function selectKeySentences(sentences, keywords, limit) {
+    const scored = sentences.map((sentence, index) => {
+      const lower = sentence.toLowerCase();
+      let score = 0;
+      keywords.forEach((item, rank) => {
+        if (lower.includes(item.term.toLowerCase())) score += item.score * (1.25 - Math.min(rank, 8) * 0.06);
+      });
+      const usefulLength = Math.min(sentence.length, 150) / 150;
+      score += usefulLength * 1.5;
+      if (index < Math.max(2, sentences.length * 0.08)) score += 1.2;
+      if (/\d|%|％|元|年|月|倍|項|步驟|第一|首先/.test(sentence)) score += 0.7;
+      return { sentence, index, score, tokens: sentenceTokenSet(sentence, keywords) };
+    }).sort((a, b) => b.score - a.score);
+    const picked = [];
+    for (const candidate of scored) {
+      const tooSimilar = picked.some(item => setSimilarity(item.tokens, candidate.tokens) > 0.68);
+      if (!tooSimilar) picked.push(candidate);
+      if (picked.length >= limit) break;
+    }
+    return picked.sort((a, b) => a.index - b.index).map(item => item.sentence);
+  }
+
+  function selectSpecialSentences(sentences, pattern, limit) {
+    const result = [];
+    for (const sentence of sentences) {
+      if (!pattern.test(sentence)) continue;
+      if (!result.some(item => item === sentence)) result.push(sentence);
+      if (result.length >= limit) break;
+    }
+    return result;
+  }
+
+  function makeReportMarkdown(record) {
+    const rows = [`# ${record.title}`, "", `建立時間：${new Date(record.createdAt).toLocaleString("zh-TW")}`, "", "## 一頁摘要", ""];
+    record.points.slice(0, 3).forEach(point => rows.push(`- ${point}`));
+    rows.push("", "## 核心主題", "", record.keywords.map(item => `#${item}`).join("　"), "", "## 關鍵重點", "");
+    record.points.forEach((point, index) => rows.push(`${index + 1}. ${point}`));
+    if (record.figures.length) {
+      rows.push("", "## 數據與例子", "");
+      record.figures.forEach(item => rows.push(`- ${item}`));
+    }
+    if (record.actions.length) {
+      rows.push("", "## 可執行事項", "");
+      record.actions.forEach(item => rows.push(`- ${item}`));
+    }
+    rows.push("", "---", "本報告由瀏覽器本機的抽取式分析產生，重要結論請回看原逐字稿確認語境。");
+    return rows.join("\n");
+  }
+
+  function createReport(text, requestedTitle, depth) {
+    const cleaned = cleanTranscript(text);
+    const sentences = splitReportSentences(cleaned);
+    if (cleaned.length < 120 || sentences.length < 3) throw new Error("逐字稿內容太短；請至少貼上約 120 字、包含 3 個完整句子。");
+    const keywordItems = keywordAnalysis(sentences);
+    const keywords = keywordItems.length ? keywordItems : rawSentenceTerms(sentences.join(" ")).slice(0, 8).map(term => ({ term, count: 1, score: 1 }));
+    const points = selectKeySentences(sentences, keywords, depth);
+    const title = requestedTitle.trim() || `${keywords.slice(0, 3).map(item => item.term).join("、") || "逐字稿"}｜重點報告`;
+    const actions = selectSpecialSentences(sentences, /建議|應該|必須|需要|可以|記得|務必|下一步|行動|步驟|recommend|should|must|need to|next step/i, 5);
+    const figures = selectSpecialSentences(sentences, /\d+(?:[.,]\d+)?\s*(?:%|％|元|萬|億|年|月|日|小時|分鐘|秒|倍|個|項|種|次|人|GB|MB|kg|km)?|百分之[一二三四五六七八九十百千零〇兩]+/i, 5);
+    const record = {
+      id: globalThis.crypto?.randomUUID?.() || `report-${Date.now()}`,
+      title: title.slice(0, 100),
+      createdAt: Date.now(),
+      sourceChars: cleaned.length,
+      sentenceCount: sentences.length,
+      keywords: keywords.slice(0, 8).map(item => item.term),
+      points,
+      actions,
+      figures,
+    };
+    record.markdown = makeReportMarkdown(record);
+    return record;
+  }
+
+  function activeReport() {
+    return reportHistory.find(item => item.id === activeReportId) || null;
+  }
+
+  function appendReportSection(title, items, ordered = false) {
+    if (!items?.length) return;
+    const heading = document.createElement("h4");
+    heading.textContent = title;
+    reportOutput.appendChild(heading);
+    const list = document.createElement(ordered ? "ol" : "ul");
+    items.forEach(item => {
+      const row = document.createElement("li");
+      row.textContent = item;
+      list.appendChild(row);
+    });
+    reportOutput.appendChild(list);
+  }
+
+  function renderReportHistory() {
+    reportHistorySelect.innerHTML = "";
+    if (!reportHistory.length) {
+      reportHistoryRow.classList.remove("show");
+      return;
+    }
+    reportHistoryRow.classList.add("show");
+    reportHistory.forEach(record => {
+      const option = document.createElement("option");
+      option.value = record.id;
+      option.textContent = `${record.title} · ${new Date(record.createdAt).toLocaleDateString("zh-TW")}`;
+      option.selected = record.id === activeReportId;
+      reportHistorySelect.appendChild(option);
+    });
+  }
+
+  function renderReport() {
+    const record = activeReport();
+    renderReportHistory();
+    if (!record) {
+      reportResult.classList.remove("show");
+      clearCanvas();
+      return;
+    }
+    reportResultTitle.textContent = record.title;
+    reportResultMeta.textContent = `${record.sourceChars.toLocaleString("zh-TW")} 字 · ${record.sentenceCount} 句 · ${record.points.length} 項重點 · ${new Date(record.createdAt).toLocaleString("zh-TW")}`;
+    reportOutput.innerHTML = "";
+    appendReportSection("一頁摘要", record.points.slice(0, 3));
+    const keywordHeading = document.createElement("h4");
+    keywordHeading.textContent = "核心主題";
+    reportOutput.appendChild(keywordHeading);
+    const keywordWrap = document.createElement("div");
+    keywordWrap.className = "report-keywords";
+    record.keywords.forEach(keyword => {
+      const chip = document.createElement("span");
+      chip.className = "report-keyword";
+      chip.textContent = keyword;
+      keywordWrap.appendChild(chip);
+    });
+    reportOutput.appendChild(keywordWrap);
+    appendReportSection("關鍵重點", record.points, true);
+    appendReportSection("數據與例子", record.figures);
+    appendReportSection("可執行事項", record.actions);
+    const note = document.createElement("p");
+    note.textContent = "本機抽取式分析不會新增逐字稿中沒有的內容；重要結論請回看原文確認語境。";
+    const noteTitle = document.createElement("h4");
+    noteTitle.textContent = "閱讀提醒";
+    reportOutput.append(noteTitle, note);
+    reportResult.classList.add("show");
+    requestAnimationFrame(() => drawReportVisual(record, reportVisualMode.value));
+  }
+
+  function clearCanvas() {
+    const context = reportCanvas.getContext("2d");
+    context.fillStyle = "#07111E";
+    context.fillRect(0, 0, reportCanvas.width, reportCanvas.height);
+  }
+
+  function roundRectPath(context, x, y, width, height, radius) {
+    const r = Math.min(radius, width / 2, height / 2);
+    context.beginPath();
+    context.moveTo(x + r, y);
+    context.arcTo(x + width, y, x + width, y + height, r);
+    context.arcTo(x + width, y + height, x, y + height, r);
+    context.arcTo(x, y + height, x, y, r);
+    context.arcTo(x, y, x + width, y, r);
+    context.closePath();
+  }
+
+  function canvasLines(context, text, maxWidth, maxLines = 4) {
+    const chars = [...String(text || "")];
+    const lines = [];
+    let line = "";
+    for (const char of chars) {
+      const candidate = line + char;
+      if (context.measureText(candidate).width > maxWidth && line) {
+        lines.push(line.trim());
+        line = char;
+        if (lines.length === maxLines) break;
+      } else {
+        line = candidate;
+      }
+    }
+    if (lines.length < maxLines && line.trim()) lines.push(line.trim());
+    if (lines.length === maxLines && chars.join("").length > lines.join("").length) {
+      lines[maxLines - 1] = `${lines[maxLines - 1].replace(/[，。；、,.!?！？]?$/, "")}…`;
+    }
+    return lines;
+  }
+
+  function paintWrappedText(context, text, x, y, maxWidth, lineHeight, maxLines, align = "left") {
+    context.textAlign = align;
+    const lines = canvasLines(context, text, maxWidth, maxLines);
+    lines.forEach((line, index) => context.fillText(line, x, y + index * lineHeight));
+    return lines.length;
+  }
+
+  function paintCanvasBase(context, record, kicker) {
+    const gradient = context.createLinearGradient(0, 0, 1600, 1000);
+    gradient.addColorStop(0, "#07111E");
+    gradient.addColorStop(1, "#102138");
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, 1600, 1000);
+    const glow = context.createRadialGradient(1320, 80, 0, 1320, 80, 480);
+    glow.addColorStop(0, "rgba(45,212,191,0.18)");
+    glow.addColorStop(1, "rgba(45,212,191,0)");
+    context.fillStyle = glow;
+    context.fillRect(0, 0, 1600, 1000);
+    context.fillStyle = "#5EEAD4";
+    context.font = "600 22px ui-monospace, SFMono-Regular, monospace";
+    context.textAlign = "left";
+    context.fillText(kicker, 80, 74);
+    context.fillStyle = "#F1F5F9";
+    context.font = "700 52px -apple-system, BlinkMacSystemFont, 'PingFang TC', sans-serif";
+    paintWrappedText(context, record.title, 80, 142, 1300, 62, 2);
+    context.fillStyle = "#64748B";
+    context.font = "500 19px ui-monospace, SFMono-Regular, monospace";
+    context.fillText(`${new Date(record.createdAt).toLocaleDateString("zh-TW")}  ·  ${record.sourceChars.toLocaleString("zh-TW")} 字  ·  本機生成`, 80, 232);
+  }
+
+  function drawMapVisual(context, record) {
+    paintCanvasBase(context, record, "TRANSCRIPT · CONCEPT MAP");
+    const points = record.points.slice(0, 6);
+    const positions = [
+      { x: 70, y: 315 }, { x: 70, y: 610 }, { x: 1150, y: 315 },
+      { x: 1150, y: 610 }, { x: 610, y: 285 }, { x: 610, y: 720 }
+    ];
+    const center = { x: 570, y: 490, w: 460, h: 190 };
+    context.lineWidth = 3;
+    context.strokeStyle = "rgba(94,234,212,0.28)";
+    positions.slice(0, points.length).forEach(position => {
+      const nodeW = 380;
+      const nodeH = 200;
+      const nodeCenterX = position.x + nodeW / 2;
+      const nodeCenterY = position.y + nodeH / 2;
+      context.beginPath();
+      context.moveTo(center.x + center.w / 2, center.y + center.h / 2);
+      context.bezierCurveTo(800, nodeCenterY, nodeCenterX, 570, nodeCenterX, nodeCenterY);
+      context.stroke();
+    });
+    roundRectPath(context, center.x, center.y, center.w, center.h, 28);
+    context.fillStyle = "#123A3A";
+    context.fill();
+    context.strokeStyle = "#2DD4BF";
+    context.stroke();
+    context.fillStyle = "#5EEAD4";
+    context.font = "700 22px ui-monospace, SFMono-Regular, monospace";
+    context.textAlign = "center";
+    context.fillText("核心摘要", center.x + center.w / 2, center.y + 50);
+    context.fillStyle = "#F1F5F9";
+    context.font = "600 24px -apple-system, BlinkMacSystemFont, 'PingFang TC', sans-serif";
+    paintWrappedText(context, points[0], center.x + center.w / 2, center.y + 92, center.w - 60, 34, 3, "center");
+    const accents = ["#2DD4BF", "#38BDF8", "#A78BFA", "#F59E0B", "#FB7185", "#84CC16"];
+    points.forEach((point, index) => {
+      const position = positions[index];
+      const width = 380;
+      const height = 200;
+      roundRectPath(context, position.x, position.y, width, height, 22);
+      context.fillStyle = "rgba(15,23,42,0.94)";
+      context.fill();
+      context.strokeStyle = `${accents[index]}99`;
+      context.lineWidth = 2;
+      context.stroke();
+      context.fillStyle = accents[index];
+      context.font = "700 20px ui-monospace, SFMono-Regular, monospace";
+      context.textAlign = "left";
+      context.fillText(`${String(index + 1).padStart(2, "0")}  ${record.keywords[index] || "重點"}`, position.x + 26, position.y + 42);
+      context.fillStyle = "#CBD5E1";
+      context.font = "500 21px -apple-system, BlinkMacSystemFont, 'PingFang TC', sans-serif";
+      paintWrappedText(context, point, position.x + 26, position.y + 82, width - 52, 31, 4);
+    });
+  }
+
+  function drawCardsVisual(context, record) {
+    paintCanvasBase(context, record, "TRANSCRIPT · KEY TAKEAWAYS");
+    const points = record.points.slice(0, 5);
+    points.forEach((point, index) => {
+      const x = 80 + (index % 2) * 760;
+      const y = 290 + Math.floor(index / 2) * 220;
+      const width = index === 4 ? 1460 : 700;
+      const height = 182;
+      roundRectPath(context, x, y, width, height, 22);
+      context.fillStyle = "rgba(15,23,42,0.90)";
+      context.fill();
+      context.strokeStyle = index === 0 ? "rgba(45,212,191,0.82)" : "rgba(148,163,184,0.24)";
+      context.lineWidth = 2;
+      context.stroke();
+      context.fillStyle = index === 0 ? "#2DD4BF" : "#64748B";
+      context.font = "700 34px ui-monospace, SFMono-Regular, monospace";
+      context.textAlign = "left";
+      context.fillText(String(index + 1).padStart(2, "0"), x + 26, y + 50);
+      context.fillStyle = "#F1F5F9";
+      context.font = "600 23px -apple-system, BlinkMacSystemFont, 'PingFang TC', sans-serif";
+      paintWrappedText(context, point, x + 92, y + 43, width - 122, 34, 4);
+    });
+    context.fillStyle = "#64748B";
+    context.font = "500 17px ui-monospace, SFMono-Regular, monospace";
+    context.fillText(record.keywords.map(item => `#${item}`).join("   "), 80, 958);
+  }
+
+  function drawReportVisual(record, mode) {
+    const context = reportCanvas.getContext("2d");
+    context.clearRect(0, 0, reportCanvas.width, reportCanvas.height);
+    if (mode === "cards") drawCardsVisual(context, record);
+    else drawMapVisual(context, record);
+  }
+
+  function generateReport() {
+    try {
+      reportGenerate.disabled = true;
+      reportGenerate.textContent = "分析中…";
+      setReportStatus("正在本機分析句子、主題與關鍵資訊…");
+      const record = createReport(reportSource.value, reportTitleInput.value, Number(reportDepth.value) || 7);
+      reportHistory = reportHistory.filter(item => item.id !== record.id);
+      reportHistory.unshift(record);
+      activeReportId = record.id;
+      saveReportHistory();
+      renderReport();
+      setReportStatus(`完成：已整理 ${record.points.length} 項重點並生成視覺圖，報告已保存到歷史記錄。`, "ok");
+      reportResult.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    } catch (error) {
+      setReportStatus(error?.message || "無法分析這份逐字稿，請檢查內容後重試。", "err");
+      reportSource.focus();
+    } finally {
+      reportGenerate.disabled = false;
+      reportGenerate.textContent = "生成重點報告";
+    }
+  }
+
+  async function copyReport() {
+    const record = activeReport();
+    if (!record) return;
+    try {
+      await navigator.clipboard.writeText(record.markdown || makeReportMarkdown(record));
+    } catch {
+      const helper = document.createElement("textarea");
+      helper.value = record.markdown || makeReportMarkdown(record);
+      document.body.appendChild(helper);
+      helper.select();
+      document.execCommand("copy");
+      helper.remove();
+    }
+    setReportStatus("重點報告已複製到剪貼簿。", "ok");
+  }
+
+  function downloadReportMarkdown() {
+    const record = activeReport();
+    if (!record) return;
+    const blob = new Blob([record.markdown || makeReportMarkdown(record)], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = safeFileName({ title: record.title }, "md");
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function downloadReportPng() {
+    const record = activeReport();
+    if (!record) return;
+    drawReportVisual(record, reportVisualMode.value);
+    const link = document.createElement("a");
+    link.download = safeFileName({ title: `${record.title}-${reportVisualMode.value === "cards" ? "重點卡片" : "概念地圖"}` }, "png");
+    link.href = reportCanvas.toDataURL("image/png");
+    link.click();
+    setReportStatus("視覺圖已下載為 PNG。", "ok");
+  }
+
+  document.getElementById("report-use-captured").addEventListener("click", () => {
+    const record = activeTranscript();
+    if (!record) {
+      setReportStatus("上方尚無逐字稿記錄；請直接貼上內容，或先截取一部影片。", "err");
+      reportSource.focus();
+      return;
+    }
+    reportTitleInput.value = record.title || "";
+    reportSource.value = transcriptText(record);
+    setReportStatus("已帶入上方逐字稿，可以直接生成報告。", "ok");
+  });
+  reportGenerate.addEventListener("click", generateReport);
+  reportHistorySelect.addEventListener("change", () => {
+    activeReportId = reportHistorySelect.value;
+    renderReport();
+    setReportStatus("已開啟歷史報告。", "ok");
+  });
+  document.getElementById("report-delete").addEventListener("click", () => {
+    const record = activeReport();
+    if (!record || !confirm(`確定刪除「${record.title}」？`)) return;
+    reportHistory = reportHistory.filter(item => item.id !== record.id);
+    activeReportId = reportHistory[0]?.id || null;
+    saveReportHistory();
+    renderReport();
+    setReportStatus("報告記錄已刪除。", "ok");
+  });
+  document.getElementById("report-copy").addEventListener("click", copyReport);
+  document.getElementById("report-md").addEventListener("click", downloadReportMarkdown);
+  document.getElementById("report-png").addEventListener("click", downloadReportPng);
+  document.getElementById("report-refresh-image").addEventListener("click", () => {
+    const record = activeReport();
+    if (record) drawReportVisual(record, reportVisualMode.value);
+  });
+  reportVisualMode.addEventListener("change", () => {
+    const record = activeReport();
+    if (record) drawReportVisual(record, reportVisualMode.value);
+  });
+  renderReport();
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
