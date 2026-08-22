@@ -1,9 +1,10 @@
-const CACHE_NAME = "toolbox-pwa-v4";
+const CACHE_NAME = "toolbox-pwa-v5";
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./assets/icon.svg"
+  "./assets/icon.svg",
+  "./assets/opencc-cn2t.min.js"
 ];
 
 self.addEventListener("install", (event) => {
